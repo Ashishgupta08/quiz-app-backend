@@ -1,24 +1,30 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const app = express();
 const mongoose = require('mongoose');
 
+const app = express();
+const URI = process.env.URI;
+const PORT = process.env.PORT;
 app.use(cors());
 app.use(express.json());
 
-// mongoose.connect('mongodb://localhost/test', {useNewUrlParser: true, useUnifiedTopology: true});
-
-const check = process.env.DB_HOST
+const client = mongoose.connect(URI,{useNewUrlParser: true, useUnifiedTopology: true})
+                        .then(()=>console.log("\n <===== Connected =====> \n"))
+                        .catch(e=>console.log(" \n Could not connect to database. \n Error :- ", e));
 
 app.get('/', (req, res) => {
-    res.send(check)
+    res.send("Welcome to the server of Quizo App.")
 });
 
-app.get('/user', (req, res) => {
-    res.json({username: "admin", password: "admin"})
-});
+// @routes user
+const user = require('./routes/user.router')
+app.use('/user', user)
 
-app.listen(3000, () => {
-    console.log('server started');
+// @routes quiz
+const quiz = require('./routes/quiz.router')
+app.use('/quiz', quiz)
+
+app.listen(PORT, () => {
+    console.log(`\n Server Started at port no - ${PORT}`);
 }); 
