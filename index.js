@@ -17,13 +17,14 @@ app.get('/', (req, res) => {
     res.send("Welcome to the server of Quizo App.")
 });
 
-// @routes user
 const user = require('./routes/user.router')
 app.use('/user', user)
 
-// @routes quiz
 const quiz = require('./routes/quiz.router')
 app.use('/quiz', quiz)
+
+const leaderBoard = require('./routes/leaderboard.router')
+app.use('/leaderBoard', leaderBoard)
 
 app.listen(PORT, () => {
     console.log(`\n Server Started at port no - ${PORT}`);

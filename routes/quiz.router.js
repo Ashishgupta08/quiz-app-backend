@@ -1,34 +1,20 @@
 const express = require('express')
-const jwt = require('jsonwebtoken')
 const router = express.Router()
-const { Quiz } = require('../models/model')
-const secret = process.env.SECRET;
-
-function authorizedUser(req, res, next){
-    const token = req.headers.authorization;
-    try{
-        const decode = jwt.verify(token, secret);
-        req.body = decode.username;
-        return next();
-    }catch(e){
-        return res.status(401).json({
-            success: false,
-            result: "Login to play the quiz."
-        })
-    }
-}
+const { Quiz } = require('../models/quiz.model')
+const { authorizedUser } = require('../utils/authorizedUser')
 
 router.route('/')
+
     .get(authorizedUser, async(req, res)=>{
         const quiz = await Quiz.find();
         res.json({
-            username: req.body,
+            loggenInUser: req.body,
             success: true,
             result: quiz
         })
     })
 
-    .post(async(req,res)=>{
+    .post(authorizedUser, async(req,res)=>{
         const { quizName, questions } = req.body;
         try{
             const newQuiz = await new Quiz({
@@ -49,11 +35,12 @@ router.route('/')
         }
     })
 
-router.route('/id')
-    .get(async(req, res)=>{
-        const { quizId } = req.body;
+router.route('/:id')
+
+    .get(authorizedUser, async(req, res)=>{
+        const  { id }  = req.params;
         try{
-            const quiz = await Quiz.findById({ _id: quizId});
+            const quiz = await Quiz.findById({ _id: id});
             res.json({
                 success: true,
                 result: quiz
