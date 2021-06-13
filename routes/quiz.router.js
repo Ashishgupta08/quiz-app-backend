@@ -6,12 +6,21 @@ const { authorizedUser } = require('../utils/authorizedUser')
 router.route('/')
 
     .get(authorizedUser, async(req, res)=>{
-        const quiz = await Quiz.find();
-        res.json({
-            loggenInUser: req.body,
-            success: true,
-            result: quiz
-        })
+        try{
+            const quiz = await Quiz.find();
+            res.json({
+                success: true,
+                result: quiz
+            })
+        }catch(e){
+            console.log(e.message);
+            res.status(501).json({
+                success: false,
+                error: e.message,
+                result: 'Unable to fetch data.'
+            })
+        }
+        
     })
 
     .post(authorizedUser, async(req,res)=>{
@@ -27,6 +36,7 @@ router.route('/')
                 result: `${quiz.quizName} quiz created successfully.`
             })
         }catch(e){
+            console.log(e.message);
             res.status(409).json({
                 success: false,
                 error: e.message,
@@ -46,6 +56,7 @@ router.route('/:id')
                 result: quiz
             })
         }catch(e){
+            console.log(e.message);
             res.status(404).json({
                 success: false,
                 error: e.message,

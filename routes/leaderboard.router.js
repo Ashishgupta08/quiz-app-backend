@@ -5,7 +5,7 @@ const { authorizedUser } = require('../utils/authorizedUser')
 
 router.get('/',authorizedUser, async (req, res) => {
     try{
-        const data = await LeaderBoard.find();
+        const data = await LeaderBoard.find().populate({ path: 'quizId'}).populate({ path: 'leaderBoard', populate: { path: 'userId', populate: 'User' } });
         res.json({
             success: true,
             result: data

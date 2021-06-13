@@ -30,6 +30,7 @@ router.get('/login', async (req,res)=>{
                 })
             }
         }catch(e){
+            console.log(e.message);
             res.status(404).json({
                 success: false,
                 error: e.message,
@@ -53,6 +54,7 @@ router.get('/getUserData',authorizedUser ,async (req, res) => {
             result: userData
         })
     }catch(e){
+        console.log(e.message);
         res.status(501).json({
             success: false,
             error: e.message,
@@ -82,7 +84,7 @@ router.post('/signup', async (req,res)=>{
                 result: token
             })
         }catch(e){
-            console.log({e})
+            console.log(e.message);
             res.status(409).json({
                 success: false,
                 error: e.message,
@@ -107,6 +109,7 @@ router.patch('/updateScore', async (req, res) => {
             result: "Successfully Updated"
         })
     }catch(e){
+        console.log(e.message);
         res.status(409).json({
             success: false,
             error: e.message,
