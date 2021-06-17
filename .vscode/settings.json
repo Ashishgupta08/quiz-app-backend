@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/5bf3f089-6972-49a6-b60d-59685f5d8a0f/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/quiz-app-server",
+    "appService.deploySubpath": "."
+}
