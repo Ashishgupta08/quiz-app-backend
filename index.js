@@ -26,6 +26,10 @@ app.use('/quiz', quiz)
 const leaderBoard = require('./routes/leaderboard.router')
 app.use('/leaderBoard', leaderBoard)
 
+app.use('*', (req, res) => {
+    res.send("Error 404 - Page not found.")
+});
+
 app.listen(PORT, () => {
     console.log(`\n Server Started at port no - ${PORT}`);
 }); 
