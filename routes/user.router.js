@@ -6,7 +6,7 @@ const { User } = require('../models/user.model')
 const { authorizedUser } = require('../utils/authorizedUser')
 const secret = process.env['SECRET'];
 
-router.get('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
   const { username, password } = req.body
   try {
     const user = await User.findOne({ username: username })
