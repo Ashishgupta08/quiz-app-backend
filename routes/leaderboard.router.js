@@ -5,7 +5,7 @@ const { authorizedUser } = require('../utils/authorizedUser')
 
 router.get('/', authorizedUser, async (req, res) => {
   try {
-    const data = await LeaderBoard.find().populate({ path: 'quizId' }).populate({ path: 'leaderBoard', populate: { path: 'userId', populate: 'User' } });
+    const data = await LeaderBoard.find().populate({ path: 'quizId', select: 'quizName' }).populate({ path: 'leaderBoard', populate: { path: 'userId', populate: 'User', select: 'name' } });
     res.json({
       success: true,
       result: data
@@ -35,7 +35,7 @@ router.post('/', authorizedUser, async (req, res) => {
         result: "LeaderBoard Successfully Updated"
       })
     }
-    const prevData = quizLeaderBoard.leaderBoard.find(item => item.userId.toString() === leaderBoard.userId.toString())
+    const prevData = quizLeaderBoard.leaderBoard.find(item => item.userId.toString() === leaderBoard.userId)
     if (prevData) {
       const updatedLeaderBoard = await LeaderBoard.findOneAndUpdate({ quizId: quizId, "leaderBoard.userId": leaderBoard.userId.toString() }, { $set: { "leaderBoard.$.score": leaderBoard.score } })
     } else {

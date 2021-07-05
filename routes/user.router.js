@@ -46,7 +46,8 @@ router.get('/getUserData', authorizedUser, async (req, res) => {
       path: 'score',
       populate: {
         path: 'quizId',
-        populate: 'Quiz'
+        populate: 'Quiz',
+        select: 'quizName'
       }
     });
     res.json({
@@ -93,16 +94,15 @@ router.post('/signup', async (req, res) => {
   }
 })
 
-router.patch('/updateScore', async (req, res) => {
-  const { id, score } = req.body;
+router.patch('/updateScore', authorizedUser, async (req, res) => {
+  const { username, score } = req.body;
   try {
-    const quiz = await User.findById({ _id: id })
-    const prevData = quiz.score.find(item => item.quizId.toString() === score.quizId.toString())
-    console.log(prevData);
+    const quiz = await User.findOne({ username: username })
+    const prevData = quiz.score.find(item => item.quizId.toString() === score.quizId)
     if (prevData) {
-      const updatedData = await User.findOneAndUpdate({ _id: id, "score.quizId": score.quizId.toString() }, { $set: { "score.$.score": score.score } })
+      const updatedData = await User.findOneAndUpdate({ username: username, "score.quizId": score.quizId.toString() }, { $set: { "score.$.score": score.score } })
     } else {
-      const updatedData = await User.findOneAndUpdate({ _id: id }, { $push: { score: score } })
+      const updatedData = await User.findOneAndUpdate({ username: username }, { $push: { score: score } })
     }
     res.json({
       success: true,
