@@ -15,7 +15,7 @@ router.get('/', authorizedUser, async (req, res) => {
     res.status(501).json({
       success: false,
       error: e.message,
-      result: 'Unable to fetch data.'
+      result: 'Unable to fetch data'
     })
   }
 })
@@ -50,7 +50,7 @@ router.post('/', authorizedUser, async (req, res) => {
     res.status(501).json({
       success: false,
       error: e.message,
-      result: 'Unable to save data.'
+      result: 'Unable to save data'
     })
   }
 })
